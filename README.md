@@ -10,6 +10,7 @@
 - https://github.com/rvanooyen/team-profile-generator.git
 
 - Video link:
-- 
+- See submission page
 
 -HTML file link:
+https://github.com/rvanooyen/team-profile-generator/blob/main/dist/index.html
