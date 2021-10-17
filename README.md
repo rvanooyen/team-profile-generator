@@ -7,7 +7,9 @@
 - Uses HTML, CSS, node.js, inquirer and jest.
 
 - Github link:
+- https://github.com/rvanooyen/team-profile-generator.git
 
 - Video link:
+- 
 
 -HTML file link:
