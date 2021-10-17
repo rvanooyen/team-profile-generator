@@ -65,7 +65,7 @@ const promptManager = () => {
             validate: officeInput => {
                 if (officeInput) {
                     employeeArr.push(this);
-                    console.log(this);                    
+                    console.log(employeeArr);                
                     return true;
                 } else {
                     console.log("Please enter the employee's office number!");
@@ -77,15 +77,16 @@ const promptManager = () => {
 };
 
 const promptEmployee = (employeeData) => {
-    const employee = new Employee(employeeData.name, employeeData.id, employeeData.email, employeeData.role);
-    
+    let employee;
+        
     if (!employeeData) {
         employeeData = [];
+    } else {
+        employee = new Employee(employeeData.name, employeeData.id, employeeData.email, employeeData.role);
     }
     
-    employeeArr.push(employee);   
+    console.log(employeeData);   
 
-    console.log(employeeData);
     return inquirer.prompt([
         {
             type: 'input',
@@ -148,17 +149,17 @@ const promptEmployee = (employeeData) => {
                     engineer.email = engineer.getEmail();
                     engineer.role = engineer.getRole();
         
-                    inquirer.prompt([
+                    return inquirer.prompt([
                         {
                             type: 'input',
                             name: 'githubName',
                             message: "Please enter the employee's github name. (Required)",
                             validate: githubInput => {
-                                if (githubInput) {                                                                    
-                                    engineer.githubName = employeeData.githubName;
-                                    console.log(this);
-                                    console.log(engineer);
-                                    employeeArr.push(engineer);
+                                if (githubInput) {                                                                                        
+                                    engineer.githubName = engineer.getGithubName();
+                                    console.log(employeeData);
+                                    employeeArr.push(githubInput);
+                                    console.log(employeeArr);
                                     return true;
                                 } else {
                                     console.log("Please enter the employee's github name!");
@@ -174,12 +175,11 @@ const promptEmployee = (employeeData) => {
                         }
                     ]).then(employeeData => {        
                         if (employeeData.confirmNewEmployee) {
-                            return promptEmployee();
+                            return promptEmployee(employeeData);
                         } else {
                             return employeeData;
                         }        
-                    });                    
-                    break;            
+                    });                               
                 case 'Intern':
                     const intern = new Intern(employeeData.name, employeeData.id, employeeData.email, employeeData.role);
         
@@ -188,7 +188,7 @@ const promptEmployee = (employeeData) => {
                     intern.email = intern.getEmail();
                     intern.role = intern.getRole();
         
-                    inquirer.prompt([
+                    return inquirer.prompt([
                         {
                             type: 'input',
                             name: 'school',
@@ -216,21 +216,26 @@ const promptEmployee = (employeeData) => {
                         } else {
                             return employeeData;
                         }        
-                    });                    
-                    break;                                    
+                    });                                                        
             }
         });
     }
 
 promptManager()
     .then(promptEmployee)
-    // .then(writeFileResponse => {
-    //     console.log(writeFileResponse);
-    //     return copyFile();
-    // })
-    // .then(copyFileResponse => {
-    //     console.log(copyFileResponse);
-    // })
+    .then(employeeData => {
+        return generatePage(employeeData);
+    })
+    .then(pageHTML => {
+        return writeFile(pageHTML);
+    })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse);
+        return copyFile();
+    })
+    .then(copyFileResponse => {
+        console.log(copyFileResponse);
+    })
     .catch(err => {
         console.log(err);
     });
